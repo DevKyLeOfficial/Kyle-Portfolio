@@ -1,6 +1,7 @@
 /** Resolve optional media paths; hide broken assets gracefully in the UI. */
 export function usePublicMedia() {
   const failed = ref(new Set())
+  const baseURL = useRuntimeConfig().app.baseURL || '/'
 
   function mediaUrl(path) {
     if (!path || typeof path !== 'string') return null
@@ -8,7 +9,8 @@ export function usePublicMedia() {
       return path
     }
     const normalized = path.startsWith('/') ? path : `/${path}`
-    return normalized
+    const base = baseURL.endsWith('/') ? baseURL : `${baseURL}/`
+    return `${base}${normalized.slice(1)}`
       .split('/')
       .map((segment, i) => (i === 0 || segment === '' ? segment : encodeURIComponent(segment)))
       .join('/')

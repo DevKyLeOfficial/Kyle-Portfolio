@@ -4,6 +4,12 @@ import { dirname, resolve } from 'node:path'
 
 const rootDir = dirname(fileURLToPath(import.meta.url))
 const publicDir = resolve(rootDir, 'public')
+const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const isUserPagesSite = repositoryName?.endsWith('.github.io')
+const baseURL = process.env.NUXT_APP_BASE_URL
+  || (process.env.GITHUB_ACTIONS === 'true' && repositoryName && !isUserPagesSite
+    ? `/${repositoryName}/`
+    : '/')
 
 export default defineNuxtConfig({
   srcDir: 'app',
@@ -18,6 +24,7 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/css/main.css', 'tdesign-vue-next/es/style/index.css', 'lenis/dist/lenis.css'],
   app: {
+    baseURL,
     head: {
       title: 'Developer Portfolio',
       meta: [
