@@ -4,12 +4,8 @@ import { dirname, resolve } from 'node:path'
 
 const rootDir = dirname(fileURLToPath(import.meta.url))
 const publicDir = resolve(rootDir, 'public')
-const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
-const isUserPagesSite = repositoryName?.endsWith('.github.io')
 const baseURL = process.env.NUXT_APP_BASE_URL
-  || (process.env.GITHUB_ACTIONS === 'true' && repositoryName && !isUserPagesSite
-    ? `/${repositoryName}/`
-    : '/')
+  || (process.env.NODE_ENV === 'production' ? '/Kyle-Portfolio/' : '/')
 
 export default defineNuxtConfig({
   srcDir: 'app',
