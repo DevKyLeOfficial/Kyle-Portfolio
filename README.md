@@ -23,17 +23,10 @@ Open **http://localhost:3000**.
 | `npm run build` | Production build (SSR) |
 | `npm run generate` | Static export for GitHub Pages |
 | `npm run preview` | Preview production build |
-| `npm run pwa:icons` | Regenerate PWA / app icons |
-| `npm run build:apk` | Static site + Android APK (JDK + Android SDK) |
-
-## Install as app
-
-- **PWA:** Contact section → **Install app** (Chrome / Edge on desktop or Android).
-- **Android APK:** Same section → **Download APK** (built in CI; loads the live site so content updates after each deploy).
 
 ## Deploy
 
-Pushes to `main` run [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml): `nuxt generate` with `NUXT_APP_BASE_URL=/Kyle-Portfolio/`, optional APK build, then GitHub Pages.
+Pushes to `main` run [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml): `nuxt generate` with `NUXT_APP_BASE_URL=/Kyle-Portfolio/`, then GitHub Pages.
 
 ## Stack
 
@@ -41,4 +34,3 @@ Pushes to `main` run [`.github/workflows/deploy.yml`](./.github/workflows/deploy
 - [TDesign Vue Next](https://tdesign.tencent.com/vue-next/overview)
 - Tailwind CSS
 - Lenis + scroll-reveal
-- PWA via `vite-plugin-pwa`; Android shell via Capacitor

@@ -22,7 +22,3 @@ logs
 .env
 .env.*
 !.env.example
-
-# Capacitor (generated locally / in CI)
-android/
-.capacitor/

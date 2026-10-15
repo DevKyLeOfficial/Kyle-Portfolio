@@ -77,13 +77,6 @@ export const site = {
     imageCaption: 'Building, debugging, and shipping from the desk',
   },
 
-  /** PWA + APK (built in CI → public/downloads/). */
-  pwa: {
-    displayName: 'Kyle | Portfolio',
-    apkFileName: 'Kyle-Portfolio.apk',
-    apkPath: '/downloads/Kyle-Portfolio.apk',
-  },
-
   media: {
     profile: profilePhoto,
     profileAlt: 'Kyle — junior full-stack developer',

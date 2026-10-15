@@ -128,8 +128,6 @@ function onBgError() {
             LinkedIn
           </a>
         </div>
-
-        <PortfolioInstallPanel />
       </div>
     </div>
   </section>

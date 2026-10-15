@@ -1,8 +1,0 @@
-{
-  "icon": {
-    "sources": ["public/pwa/icon-512.png"]
-  },
-  "splash": {
-    "sources": ["public/pwa/icon-512.png"]
-  }
-}
