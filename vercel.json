@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.com/vercel.json",
+  "buildCommand": "npm run generate",
+  "outputDirectory": ".output/public",
+  "installCommand": "npm ci",
+  "framework": null,
+  "env": {
+    "NUXT_APP_BASE_URL": "/"
+  },
+  "redirects": [
+    {
+      "source": "/Kyle-Portfolio",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/Kyle-Portfolio/:path*",
+      "destination": "/:path*",
+      "permanent": false
+    }
+  ]
+}

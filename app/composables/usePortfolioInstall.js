@@ -1,10 +1,11 @@
 import { site } from '~/data/site'
 
-/** Installer: PWA on desktop; PWA then verified APK on Android only. */
+/** Installer: PWA prompt when ready; APK only on Android when hosted. */
 export function usePortfolioInstall() {
   const { mediaUrl } = usePublicMedia()
   const nuxtApp = useNuxtApp()
   const notify = useNotify()
+  const runtimeConfig = useRuntimeConfig()
 
   const canInstall = ref(false)
   const isInstalled = ref(false)
@@ -36,6 +37,22 @@ export function usePortfolioInstall() {
     if (pwa?.install) await pwa.install()
   }
 
+  function manifestHref() {
+    const base = runtimeConfig.app?.baseURL || '/'
+    const root = base.endsWith('/') ? base : `${base}/`
+    return `${root}manifest.webmanifest`.replace(/\/{2,}/g, '/')
+  }
+
+  async function pwaAssetsReady() {
+    try {
+      const res = await fetch(manifestHref(), { cache: 'no-store' })
+      const type = (res.headers.get('content-type') || '').toLowerCase()
+      return res.ok && (type.includes('json') || type.includes('manifest'))
+    } catch {
+      return false
+    }
+  }
+
   async function apkLooksValid(url) {
     try {
       const res = await fetch(url, { method: 'HEAD' })
@@ -52,6 +69,7 @@ export function usePortfolioInstall() {
   async function runInstaller() {
     if (isInstalled.value) return
 
+    tick()
     if (canInstall.value) {
       try {
         await promptInstall()
@@ -61,11 +79,18 @@ export function usePortfolioInstall() {
       return
     }
 
+    if (!(await pwaAssetsReady())) {
+      notify.warning(
+        'Install files are missing on this deploy. Redeploy with the latest code, then open the site at your Vercel URL (root /, not /Kyle-Portfolio/).',
+      )
+      return
+    }
+
     const isAndroid = /android/i.test(navigator.userAgent || '')
 
     if (!isAndroid) {
       notify.warning(
-        'Use Chrome or Edge on this PC: click the install (⊕) icon in the address bar. This button does not download a Windows app.',
+        'Open this site in Chrome or Edge, then use ⋮ → Install Kyle | Portfolio, or the install icon in the address bar when it appears.',
       )
       return
     }
@@ -74,9 +99,7 @@ export function usePortfolioInstall() {
     if (!url) return
 
     if (!(await apkLooksValid(url))) {
-      notify.warning(
-        'Package not on the server yet. Use Chrome menu → Install app, or try again after the site deploy finishes.',
-      )
+      notify.warning('Use Chrome → Install app, or try again after deploy finishes.')
       return
     }
 

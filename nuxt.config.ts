@@ -5,8 +5,17 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 const rootDir = dirname(fileURLToPath(import.meta.url))
 const publicDir = resolve(rootDir, 'public')
-const baseURL = process.env.NUXT_APP_BASE_URL
-  || (process.env.NODE_ENV === 'production' ? '/Kyle-Portfolio/' : '/')
+
+function normalizeBase(path: string) {
+  if (!path || path === '/') return '/'
+  return path.endsWith('/') ? path : `${path}/`
+}
+
+/** GitHub Pages uses /Repo-name/; Vercel & local use /. Override with NUXT_APP_BASE_URL. */
+const baseURL = normalizeBase(
+  process.env.NUXT_APP_BASE_URL
+  ?? (process.env.VERCEL ? '/' : process.env.NODE_ENV === 'production' ? '/Kyle-Portfolio/' : '/'),
+)
 const isDev = process.env.NODE_ENV === 'development'
 
 /** Baseline HTTP security headers (static + SSR). CSP kept relaxed for Nuxt/Vite + Google Fonts. */
@@ -36,8 +45,10 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       VitePWA({
+        base: baseURL,
         registerType: 'autoUpdate',
         includeAssets: ['pwa/favicon-32.png', 'pwa/icon.svg', 'robots.txt'],
+        manifestFilename: 'manifest.webmanifest',
         manifest: {
           name: 'Kyle | Portfolio',
           short_name: 'Kyle',
@@ -109,6 +120,7 @@ export default defineNuxtConfig({
         },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: `${baseURL}pwa/favicon-32.png` },
         { rel: 'apple-touch-icon', href: `${baseURL}pwa/apple-touch-icon.png` },
+        { rel: 'manifest', href: `${baseURL}manifest.webmanifest` },
       ],
     },
   },
