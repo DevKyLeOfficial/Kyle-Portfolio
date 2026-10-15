@@ -52,17 +52,13 @@ const showAboutPhoto = computed(() => {
         >
           <h3 class="font-mono text-base font-bold text-emerald-400">dev.stats</h3>
           <ul class="space-y-4 font-mono text-sm leading-relaxed text-slate-300 sm:text-base">
-            <li class="flex gap-3">
+            <li
+              v-for="(line, i) in site.devStats"
+              :key="i"
+              class="flex gap-3"
+            >
               <span class="mt-0.5 shrink-0 text-emerald-500">✓</span>
-              <span>Clean, maintainable codebases</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-0.5 shrink-0 text-emerald-500">✓</span>
-              <span>Git workflow &amp; code reviews</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-0.5 shrink-0 text-emerald-500">✓</span>
-              <span>Debug → fix → ship cycle</span>
+              <span>{{ line }}</span>
             </li>
           </ul>
         </aside>

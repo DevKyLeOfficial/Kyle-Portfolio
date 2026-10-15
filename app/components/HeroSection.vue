@@ -1,6 +1,7 @@
 <script setup>
 import { site } from '~/data/site'
 
+const { mediaUrl, isVisible, onMediaError } = usePublicMedia()
 const introReady = inject('introReady', ref(true))
 
 const { display: helloLine, complete: helloDone } = useTypeIn('Hello World', {
@@ -11,6 +12,19 @@ const { display: helloLine, complete: helloDone } = useTypeIn('Hello World', {
 const { display: roleLine } = useTypewriter(site.roles, { msPerChar: 45, pauseMs: 2000 })
 
 const { formatted: localTime } = useSiteClock(site.timeZone)
+
+const activeBadge = ref(null)
+const badgePreviewOpen = ref(false)
+
+function openBadgeCertificate(item) {
+  activeBadge.value = item
+  badgePreviewOpen.value = true
+}
+
+function closeBadgeCertificate() {
+  badgePreviewOpen.value = false
+  activeBadge.value = null
+}
 </script>
 
 <template>
@@ -53,7 +67,9 @@ const { formatted: localTime } = useSiteClock(site.timeZone)
                 :class="{ 'hero-hello--done': helloDone }"
               >{{ helloLine }}</span>
               <template #fallback>
-                <span class="text-gradient-metal">Hello World</span>
+                <span class="hero-hello text-gradient-metal inline-block min-h-[1em] min-w-[1ch]" aria-hidden="true"
+                  >&nbsp;</span
+                >
               </template>
             </ClientOnly><span
               class="hero-cursor ml-0.5 inline-block font-mono font-normal text-emerald-400"
@@ -116,24 +132,72 @@ const { formatted: localTime } = useSiteClock(site.timeZone)
 
           <dl
             v-reveal="{ type: 'up', delay: 400 }"
-            class="mt-10 grid grid-cols-2 gap-3 sm:mt-12 sm:gap-4 sm:grid-cols-3"
+            class="mt-10 grid grid-cols-1 gap-3 sm:mt-12 sm:grid-cols-3 sm:gap-4"
           >
-            <div class="neo-surface min-w-0 rounded-2xl px-3 py-3 sm:px-4">
+            <div class="neo-surface flex min-h-[5.25rem] min-w-0 flex-col rounded-2xl px-3 py-3 sm:px-4">
               <dt class="font-mono text-[10px] uppercase tracking-wide text-slate-500">status</dt>
-              <dd class="mt-1 text-sm font-semibold text-emerald-400">{{ site.availability }}</dd>
+              <dd class="mt-1 flex-1 text-xs font-semibold leading-snug text-emerald-400 sm:text-sm">
+                {{ site.availability }}
+              </dd>
             </div>
-            <div class="neo-surface min-w-0 rounded-2xl px-3 py-3 sm:px-4">
+            <div class="neo-surface flex min-h-[5.25rem] min-w-0 flex-col rounded-2xl px-3 py-3 sm:px-4">
               <dt class="font-mono text-[10px] uppercase tracking-wide text-slate-500">role</dt>
-              <dd class="mt-1 text-sm font-semibold text-slate-100">{{ site.title }}</dd>
+              <dd class="mt-1 flex-1 text-xs font-semibold leading-snug text-slate-100 sm:text-sm">
+                {{ site.title }}
+              </dd>
             </div>
-            <div class="col-span-2 neo-surface min-w-0 rounded-2xl px-3 py-3 sm:col-span-1 sm:px-4">
+            <div class="neo-surface flex min-h-[5.25rem] min-w-0 flex-col rounded-2xl px-3 py-3 sm:px-4">
               <dt class="font-mono text-[10px] uppercase tracking-wide text-slate-500">location</dt>
-              <dd class="mt-1 text-sm font-semibold text-slate-100">
+              <dd class="mt-1 flex-1 text-xs font-semibold leading-snug text-slate-100 sm:text-sm">
                 {{ site.location }}
-                <span v-if="localTime" class="mt-0.5 block text-xs font-normal text-slate-400">{{ localTime }}</span>
+                <span v-if="localTime" class="mt-0.5 block text-[11px] font-normal text-slate-400 sm:text-xs">
+                  {{ localTime }}
+                </span>
               </dd>
             </div>
           </dl>
+
+          <div
+            v-if="site.badges?.length"
+            v-reveal="{ type: 'up', delay: 460 }"
+            class="neo-surface mt-4 rounded-2xl px-4 py-4 sm:mt-5"
+          >
+            <p class="font-mono text-[10px] uppercase tracking-wide text-slate-500">badges</p>
+            <p class="mt-1 text-sm leading-snug text-slate-300">
+              Verified course credentials — tap a badge to preview the certificate.
+            </p>
+            <ul class="mt-4 flex flex-wrap gap-4 sm:gap-5">
+              <li
+                v-for="item in site.badges"
+                :key="item.id"
+                v-show="isVisible(item.badge)"
+                class="min-w-[5.5rem] max-w-[7rem] flex-1 sm:flex-none"
+              >
+                <button
+                  type="button"
+                  class="group flex w-full flex-col items-center gap-2 rounded-xl border border-white/10 bg-slate-950/40 p-3 transition hover:border-emerald-400/50 hover:bg-slate-900/60"
+                  :title="`Verify ${item.title} certificate`"
+                  :aria-label="`Verify ${item.title} certificate`"
+                  @click="openBadgeCertificate(item)"
+                >
+                  <span
+                    class="flex h-[4.75rem] w-[4.75rem] shrink-0 items-center justify-center rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-black/10"
+                  >
+                    <img
+                      :src="mediaUrl(item.badge)"
+                      :alt="`${item.title} badge`"
+                      class="h-full w-full object-contain"
+                      loading="lazy"
+                      @error="onMediaError(item.badge)"
+                    />
+                  </span>
+                  <span class="text-center text-xs font-semibold leading-tight text-slate-100 group-hover:text-emerald-300">
+                    {{ item.title }}
+                  </span>
+                </button>
+              </li>
+            </ul> 
+          </div>
         </div>
       </div>
 
@@ -147,5 +211,34 @@ const { formatted: localTime } = useSiteClock(site.timeZone)
         <HeroCodePanel />
       </div>
     </div>
+
+    <TDialog
+      v-model:visible="badgePreviewOpen"
+      :header="activeBadge?.title ?? 'Certificate'"
+      width="min(820px, 94vw)"
+      :footer="false"
+      :close-btn="false"
+      @close="closeBadgeCertificate"
+    >
+      <template v-if="activeBadge">
+        <img
+          :src="mediaUrl(activeBadge.certificate)"
+          :alt="`${activeBadge.title} certificate`"
+          class="max-h-[70vh] w-full rounded-2xl object-contain bg-slate-950"
+          loading="lazy"
+        />
+        <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <TButton
+            theme="primary"
+            variant="outline"
+            size="medium"
+            class="!rounded-xl"
+            @click="closeBadgeCertificate"
+          >
+            Back to badges
+          </TButton>
+        </div>
+      </template>
+    </TDialog>
   </section>
 </template>

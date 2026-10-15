@@ -2,17 +2,54 @@
 import { site } from '~/data/site'
 
 const { mediaUrl, isVisible, onMediaError } = usePublicMedia()
-const active = ref(null)
-const dialogOpen = ref(false)
 
-function openProject(project) {
-  active.value = project
-  dialogOpen.value = true
+const floatOpen = ref(false)
+const floatProject = ref(null)
+const floatMode = ref('play')
+
+const floatTitle = computed(() => {
+  if (!floatProject.value) return ''
+  if (floatMode.value === 'github') return `${floatProject.value.name} — GitHub`
+  return floatProject.value.button?.label
+    ? `${floatProject.value.name} — ${floatProject.value.button.label}`
+    : floatProject.value.name
+})
+
+const floatIframeSrc = computed(() => {
+  if (!floatOpen.value || !floatProject.value) return ''
+  if (floatMode.value === 'play' && floatProject.value.button?.url) {
+    return floatProject.value.button.url
+  }
+  return ''
+})
+
+const floatExternalUrl = computed(() => {
+  if (!floatProject.value) return ''
+  if (floatMode.value === 'github') return floatProject.value.github || ''
+  return floatProject.value.button?.url || ''
+})
+
+const floatExternalLabel = computed(() =>
+  floatMode.value === 'github' ? 'Open repository ↗' : 'Open in new tab ↗',
+)
+
+function openPlayModal(project) {
+  if (!project.button?.url) return
+  floatProject.value = project
+  floatMode.value = 'play'
+  floatOpen.value = true
 }
 
-function closeDialog() {
-  dialogOpen.value = false
-  active.value = null
+function openGithubModal(project) {
+  if (!project.github) return
+  floatProject.value = project
+  floatMode.value = 'github'
+  floatOpen.value = true
+}
+
+function closeFloatModal() {
+  floatOpen.value = false
+  floatProject.value = null
 }
 </script>
 
@@ -65,51 +102,39 @@ function closeDialog() {
                 {{ t }}
               </TTag>
             </div>
-            <div class="mt-6 flex gap-3">
-              <TButton size="medium" theme="primary" variant="outline" class="!rounded-xl" @click="openProject(project)">
-                Details
-              </TButton>
-              <TButton
-                v-if="project.link && project.link !== '#'"
-                size="medium"
-                tag="a"
-                :href="project.link"
-                target="_blank"
-                rel="noopener"
-                theme="default"
-                variant="text"
-                class="!text-emerald-400"
+            <div
+              v-if="project.button?.url || project.github"
+              class="mt-6 flex flex-wrap items-center gap-3"
+            >
+              <button
+                v-if="project.button?.url"
+                type="button"
+                class="btn-metal inline-flex items-center justify-center rounded-xl px-5 py-2.5 font-mono text-sm font-semibold transition"
+                @click="openPlayModal(project)"
               >
-                Visit ↗
-              </TButton>
+                {{ project.button.label || 'Open' }}
+              </button>
+              <button
+                v-if="project.github"
+                type="button"
+                class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 py-2.5 font-mono text-sm font-semibold text-slate-200 transition hover:border-emerald-400/40 hover:bg-white/10 hover:text-emerald-300"
+                @click="openGithubModal(project)"
+              >
+                GitHub
+              </button>
             </div>
           </div>
         </article>
       </div>
     </div>
 
-    <TDialog
-      v-model:visible="dialogOpen"
-      :header="active?.name"
-      width="520px"
-      :footer="false"
-      @close="closeDialog"
-    >
-      <template v-if="active">
-        <img
-          v-if="isVisible(active.image)"
-          :src="mediaUrl(active.image)"
-          :alt="active.name"
-          class="mb-4 max-h-48 w-full rounded-2xl object-cover"
-          @error="onMediaError(active.image)"
-        />
-        <p class="text-sm leading-relaxed text-slate-400">{{ active.summary }}</p>
-        <TDivider class="!my-4" />
-        <p class="text-xs font-semibold uppercase text-slate-400">Stack</p>
-        <div class="mt-2 flex flex-wrap gap-2">
-          <TTag v-for="t in active.stack" :key="t" size="small">{{ t }}</TTag>
-        </div>
-      </template>
-    </TDialog>
+    <ProjectFloatModal
+      v-model:open="floatOpen"
+      :title="floatTitle"
+      :iframe-src="floatIframeSrc"
+      :external-url="floatExternalUrl"
+      :external-label="floatExternalLabel"
+      @close="closeFloatModal"
+    />
   </section>
 </template>

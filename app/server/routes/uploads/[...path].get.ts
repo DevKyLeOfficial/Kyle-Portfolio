@@ -17,23 +17,29 @@ function resolveUploadsRoot() {
 
 const uploadsRoot = resolveUploadsRoot()
 
+/** Only serve public media types from uploads (blocks stray .env, scripts, etc.). */
+const ALLOWED_EXT = new Set(['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif'])
+
 const MIME: Record<string, string> = {
-  pdf: 'application/pdf',
   jpg: 'image/jpeg',
   jpeg: 'image/jpeg',
   png: 'image/png',
   webp: 'image/webp',
   svg: 'image/svg+xml',
   gif: 'image/gif',
-  txt: 'text/plain; charset=utf-8',
 }
 
 /** Serve public/uploads/* (fixes dev/prod when SPA catches /uploads). */
 export default defineEventHandler(async (event) => {
   const segments = event.context.params?.path
   const rel = Array.isArray(segments) ? segments.join('/') : segments
-  if (!rel || rel.includes('..')) {
+  if (!rel || rel.includes('..') || rel.includes('\0')) {
     throw createError({ statusCode: 400, statusMessage: 'Bad path' })
+  }
+
+  const ext = rel.split('.').pop()?.toLowerCase() ?? ''
+  if (!ALLOWED_EXT.has(ext)) {
+    throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
   }
 
   const filePath = normalize(join(uploadsRoot, rel))
@@ -51,8 +57,9 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: 'Not a file' })
   }
 
-  const ext = filePath.split('.').pop()?.toLowerCase() ?? ''
   setHeader(event, 'Content-Type', MIME[ext] || 'application/octet-stream')
   setHeader(event, 'Cache-Control', 'public, max-age=3600')
+  setHeader(event, 'X-Content-Type-Options', 'nosniff')
+  setHeader(event, 'Content-Disposition', 'inline')
   return sendStream(event, createReadStream(filePath))
 })

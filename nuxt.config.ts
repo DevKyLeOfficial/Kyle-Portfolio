@@ -6,6 +6,17 @@ const rootDir = dirname(fileURLToPath(import.meta.url))
 const publicDir = resolve(rootDir, 'public')
 const baseURL = process.env.NUXT_APP_BASE_URL
   || (process.env.NODE_ENV === 'production' ? '/Kyle-Portfolio/' : '/')
+const isDev = process.env.NODE_ENV === 'development'
+
+/** Baseline HTTP security headers (static + SSR). CSP kept relaxed for Nuxt/Vite + Google Fonts. */
+const securityHeaders: Record<string, string> = {
+  'X-Frame-Options': 'SAMEORIGIN',
+  'X-Content-Type-Options': 'nosniff',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Resource-Policy': 'same-site',
+}
 
 export default defineNuxtConfig({
   srcDir: 'app',
@@ -14,9 +25,12 @@ export default defineNuxtConfig({
   },
   nitro: {
     publicAssets: [{ dir: publicDir, maxAge: 60 * 60 * 24 * 7 }],
+    routeRules: {
+      '/**': { headers: securityHeaders },
+    },
   },
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: isDev },
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/css/main.css', 'tdesign-vue-next/es/style/index.css', 'lenis/dist/lenis.css'],
   app: {

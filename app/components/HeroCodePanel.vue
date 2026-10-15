@@ -1,5 +1,7 @@
 <script setup>
 import { site } from '~/data/site'
+
+const stackItems = computed(() => site.heroStack ?? [])
 </script>
 
 <template>
@@ -11,15 +13,23 @@ import { site } from '~/data/site'
       <span class="h-3 w-3 rounded-full bg-red-500/90" />
       <span class="h-3 w-3 rounded-full bg-amber-500/90" />
       <span class="h-3 w-3 rounded-full bg-emerald-500/90" />
-      <span class="ml-2 font-mono text-xs text-slate-400">~/kyle/portfolio.ts</span>
+      <span class="ml-2 truncate font-mono text-xs text-slate-400">~/kyle/portfolio.ts</span>
     </div>
-    <pre class="overflow-x-auto bg-slate-950 p-5 font-mono text-[13px] leading-relaxed text-slate-300 sm:text-sm"><code><span class="text-slate-400">// Hello World — entry point</span>
+    <pre
+      class="overflow-x-hidden whitespace-pre-wrap break-words bg-slate-950 p-5 font-mono text-[12px] leading-relaxed text-slate-300 sm:text-[13px]"
+    ><code><span class="text-slate-400">// Hello World — entry point</span>
 <span class="text-cyan-400">console</span>.<span class="text-blue-400">log</span>(<span class="text-emerald-400">"Hello World"</span>);
 
 <span class="text-violet-400">const</span> developer = {
   <span class="text-blue-300">name</span>: <span class="text-amber-200/90">"{{ site.name }}"</span>,
   <span class="text-blue-300">role</span>: <span class="text-amber-200/90">"{{ site.title }}"</span>,
-  <span class="text-blue-300">stack</span>: [<span class="text-emerald-400">"Vue"</span>, <span class="text-emerald-400">"Nuxt"</span>, <span class="text-emerald-400">"JavaScript"</span>],
+  <span class="text-blue-300">stack</span>: [
+</code><code
+      v-for="(item, i) in stackItems"
+      :key="item"
+      class="block pl-4"
+    ><span class="text-emerald-400">"{{ item }}"</span><span class="text-slate-300">{{ i < stackItems.length - 1 ? ',' : '' }}</span>
+</code><code>  ],
   <span class="text-blue-300">status</span>: <span class="text-amber-200/90">"{{ site.availability }}"</span>,
 };
 

@@ -99,6 +99,23 @@
     position: relative;
   }
 
+  .nav-shell--visible {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+
+  .nav-shell--hidden {
+    transform: translate3d(0, calc(-100% - 0.75rem), 0);
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-shell--hidden {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
   .nav-bar {
     border: 1px solid rgb(255 255 255 / 0.16);
     background-color: rgb(7 16 24 / 0.88);
@@ -106,6 +123,10 @@
       0 10px 32px rgba(0, 0, 0, 0.45),
       inset 0 1px 0 rgb(255 255 255 / 0.08);
     @apply backdrop-blur-xl;
+  }
+
+  .nav-bar--top {
+    background-color: rgb(7 16 24 / 0.72);
   }
 
   .nav-bar--scrolled {
@@ -402,8 +423,150 @@ html.is-loading body {
   width: 100%;
 }
 
+html.is-loading #hero .hero-hello,
+html.is-loading #hero .hero-cursor {
+  visibility: hidden;
+}
+
 .loader-screen {
   touch-action: none;
+}
+
+.loader-screen--handoff {
+  filter: brightness(1.06);
+}
+
+.loader-handoff-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgb(52 211 153 / 0.22), transparent 55%);
+  animation: loader-handoff-flash 780ms ease-out forwards;
+}
+
+.loader-handoff-ring {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  height: 9rem;
+  width: 9rem;
+  transform: translate(-50%, -50%) scale(0.65);
+  border-radius: 9999px;
+  border: 1px solid rgb(52 211 153 / 0.5);
+  animation: loader-handoff-ring 780ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.loader-handoff-ring--b {
+  animation-delay: 90ms;
+  border-color: rgb(45 212 191 / 0.35);
+}
+
+.loader-handoff-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 40%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgb(52 211 153 / 0.12) 48%,
+    rgb(110 231 183 / 0.28) 50%,
+    rgb(52 211 153 / 0.12) 52%,
+    transparent
+  );
+  animation: loader-handoff-scan 780ms ease-in-out forwards;
+  mix-blend-mode: screen;
+}
+
+.loader-card--launch {
+  animation: loader-card-launch 780ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.loader-title--locked {
+  animation: loader-title-lock 780ms ease-out forwards;
+}
+
+.loader-binary-lock {
+  color: #6ee7b7;
+  text-shadow: 0 0 18px rgb(52 211 153 / 0.45);
+}
+
+.loader-progress--complete .loader-progress-fill {
+  box-shadow: 0 0 16px rgb(52 211 153 / 0.65);
+}
+
+@keyframes loader-handoff-flash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes loader-handoff-ring {
+  0% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(0.65);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.35);
+  }
+}
+
+@keyframes loader-handoff-scan {
+  0% {
+    opacity: 0;
+    transform: translateY(-115%);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(115%);
+  }
+}
+
+@keyframes loader-card-launch {
+  0% {
+    filter: brightness(1);
+    transform: scale(1) translateY(0);
+  }
+  45% {
+    filter: brightness(1.12);
+    transform: scale(1.035) translateY(-4px);
+  }
+  100% {
+    filter: brightness(1.05);
+    transform: scale(1.06) translateY(-8px);
+  }
+}
+
+@keyframes loader-title-lock {
+  0%,
+  100% {
+    letter-spacing: 0;
+    transform: scale(1);
+  }
+  40% {
+    letter-spacing: 0.06em;
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-handoff-flash,
+  .loader-handoff-ring,
+  .loader-handoff-scan,
+  .loader-card--launch,
+  .loader-title--locked {
+    animation: none !important;
+  }
 }
 
 ::-webkit-scrollbar {

@@ -14,25 +14,67 @@ export const site = {
   name: 'Kyle',
   title: 'Junior Full-Stack Developer',
   tagline:
-    'Junior full-stack developer — I build with Vue & Nuxt, test and QA what ships, and craft UI/UX that feels clear and reliable.',
+    'Eager to become a full-stack developer — I build with Nuxt, Laravel, and Node, test what ships, and design with Figma and Adobe tools.',
   metaDescription:
-    'Kyle — junior full-stack developer in the Philippines. Vue, Nuxt, QA, UI/UX, and clean code. Portfolio, projects, and credentials.',
+    'Kyle — full-stack developer in training, Baguio Philippines. JavaScript, Java, Python, Laravel, Nuxt, React, PostgreSQL, QA, and UI/UX.',
+  githubBio: {
+    headline: 'Eager to become a Full Stack Developer',
+    learningIntro: "I'm currently learning",
+    learning: [
+      'JavaScript',
+      'Java',
+      'Tailwind CSS',
+      'C++',
+      'Python',
+      'Laravel',
+      'Photoshop',
+      'Adobe Premiere Pro',
+      'After Effects',
+      'MySQL',
+      'Basic Web Vulnerabilities',
+      'Assembly (machine language)',
+    ],
+  },
   email: 'kydev1323@gmail.com',
-  github: 'https://github.com/kydev1323',
-  linkedin: '',
+  github: 'https://github.com/DevKyLeOfficial',
+  linkedin: 'https://www.linkedin.com/in/kylejoshuanoelalvaro/',
   location: 'Baguio City, Philippines',
   /** IANA timezone — Philippines uses Asia/Manila (PHT, UTC+8, no daylight saving). */
   timeZone: 'Asia/Manila',
-  availability: 'Open to junior roles & collaborations',
-  heroStack: ['Vue', 'Nuxt', 'TypeScript', 'Node.js', 'Tailwind CSS'],
+  availability: 'OPEN FOR WORK OR COLLABORATIONS',
+  /** Badge image → certificate image (public/uploads/Badges & Certificates). */
+  badges: [
+    {
+      id: 'badge-js-essentials-1',
+      title: 'JavaScript Essentials 1',
+      badge: '/uploads/Badges/JavaScript Essential 1.png',
+      certificate: '/uploads/Certificates/JavaScript Essentials 1.png',
+    },
+    {
+      id: 'badge-intro-cyber',
+      title: 'Introduction to Cybersecurity',
+      badge: '/uploads/Badges/Introduction to Cybersecurity.png',
+      certificate: '/uploads/Certificates/Course completion Introduction to Cybersecurity by CISCO.png',
+    },
+    {
+      id: 'badge-endpoint',
+      title: 'Endpoint Security',
+      badge: '/uploads/Badges/Endpoint.png',
+      certificate: '/uploads/Certificates/Course Completion Endpoint Security by CISCO.png',
+    },
+  ],
+  heroStack: ['JavaScript', 'Nuxt', 'Laravel', 'Tailwind CSS', 'Node.js', 'Python'],
   devStats: [
-    'Junior full-stack — Vue, Nuxt, Node.js & Laravel',
-    'QA, testing, debugging, and UI/UX (Figma)',
-    'Git workflow, clean code, and clear documentation',
+    'Stacks I use — Git, Java, JS, PHP, Python, Laravel, React, Nuxt, Node, PostgreSQL',
+    'Design & media — Figma, Photoshop, Lightroom, Premiere Pro',
+    'QA, debugging, and growing in MySQL, C++, and web security',
   ],
   contact: {
     intro:
-      'Open to junior developer roles, freelance UI/UX or full-stack work, QA support, or mentoring collaborations. Email is the fastest way to reach me.',
+      'Open for work or collaborations. Email is the fastest way to reach me.',
+    image: '/uploads/Contact.png',
+    imageAlt: 'Kyle at a dual-monitor development workspace',
+    imageCaption: 'Building, debugging, and shipping from the desk',
   },
 
   media: {
@@ -59,69 +101,80 @@ export const site = {
   ],
 
   roles: [
-    'Junior Full-Stack Developer',
+    'Aspiring Full-Stack Developer',
     'QA & Testing',
-    'UI/UX Development',
+    'UI/UX & Creative Tools',
     'Clean Code',
   ],
 
   about: [
-    'I am Kyle—a junior full-stack developer based in Baguio. I also take on testing and QA, and I care about UI/UX: how screens look, how flows feel, and whether features hold up before they go live.',
-    'At Baguio LGU I build and maintain web systems as Information System Analyst 1. Outside work I mentor students, volunteer with tech communities, and keep sharpening Vue, Nuxt, Laravel, and design tools like Figma.',
+    'I am Kyle—based in Baguio and eager to grow into a full-stack developer. I work with JavaScript, Java, Python, PHP, Laravel, Nuxt, React, and Tailwind, and I care about QA, UI/UX, and shipping reliable web systems.',
+    'At Baguio LGU I build and maintain web systems as Information System Analyst 1. In the other hand I also mentor students, collaborate with peers, contribute to tech communities, and keep leveling up design and media tools (Figma, Photoshop, Premiere Pro) alongside backend and security basics.',
+  ],
+
+  skillGroups: [
+    { key: 'languages', label: 'Languages' },
+    { key: 'frameworks', label: 'Frameworks & libraries' },
+    { key: 'data', label: 'Databases' },
+    { key: 'creative', label: 'Design & media' },
+    { key: 'tools', label: 'Tools' },
+    { key: 'learning', label: 'Currently learning' },
   ],
 
   skills: {
-    languages: ['HTML/CSS', 'JavaScript', 'TypeScript'],
-    frameworks: ['Tailwind CSS', 'Vue', 'Nuxt', 'Node.js', 'Laravel'],
-    tools: ['Git', 'GitHub Desktop', 'VS Code', 'Figma', 'CMD'],
-    focus: ['Clean code', 'Debugging', 'UI/UX', 'QA'],
+    languages: ['HTML/CSS', 'JavaScript', 'Java', 'PHP', 'Python', 'C++'],
+    frameworks: ['React', 'Vue', 'Nuxt', 'Node.js', 'Laravel', 'Tailwind CSS'],
+    data: ['MySQL', 'PostgreSQL'],
+    creative: ['Figma', 'Photoshop', 'Lightroom', 'Premiere Pro', 'After Effects'],
+    tools: ['Git', 'GitHub', 'VS Code'],
+    learning: [
+      'JavaScript',
+      'Java',
+      'Tailwind CSS',
+      'C++',
+      'Python',
+      'Laravel',
+      'Photoshop',
+      'Premiere Pro',
+      'After Effects',
+      'MySQL',
+      'Web vulnerabilities',
+      'Assembly',
+    ],
   },
 
   projects: [
     {
-      id: 'artisthub-baguio',
-      name: 'ArtistHub Baguio',
-      tag: 'frontend · UI/UX',
-      year: '2025',
-      summary:
-        'Frontend design and development for ArtistHub Baguio, plus full project documentation covering technical and functional requirements.',
-      stack: ['Vue', 'JavaScript', 'HTML/CSS', 'Figma'],
-      image: null,
-      link: '#',
-    },
-    {
       id: 'ecoswims',
       name: 'EcoSwims',
       tag: 'full-stack',
-      year: '2025',
-      summary:
-        'Baguio City LGU web system for the EcoSwims program — public portal, admin workflows, integrations, QA, and ongoing maintenance.',
-      stack: ['Nuxt', 'Vue', 'Node.js', 'Tailwind CSS', 'Laravel'],
-      image: null,
-      link: 'https://ecoswims.baguio.gov.ph',
-    },
-    {
-      id: 'baguio-lgu-systems',
-      name: 'Baguio LGU Web Systems',
-      tag: 'full-stack',
-      year: '2025',
-      summary:
-        'Internal web tools and public-facing systems for Baguio City LGU — requirements, UI, integrations, QA, and ongoing maintenance.',
-      stack: ['Nuxt', 'Vue', 'Node.js', 'Tailwind CSS', 'Laravel'],
-      image: null,
-      link: '#',
-    },
-    {
-      id: 'portfolio',
-      name: 'Developer Portfolio',
-      tag: 'full-stack',
       year: '2026',
       summary:
-        'This site — Nuxt 3, Vue, Tailwind, and TDesign, with scroll animations, credentials gallery, and email contact.',
-      stack: ['Nuxt', 'Vue', 'Tailwind CSS', 'TypeScript'],
-      image: null,
-      link: '#',
+        "EcoSwims Web System — aggregated solid-waste intake, collection volumes, and sorted-material movement for monitoring and analysis.",
+      stack: ['Nuxt', 'Vue', 'Node.js', 'JavaScript', 'Tailwind CSS', 'Laravel'],
+      image: '/uploads/Projects/Ecoswims.png',
     },
+    {
+      id: 'tictactoe',
+      name: 'Tic Tac Toe',
+      tag: 'Basic web game',
+      year: '2025',
+      summary:
+        "Tic Tac Toe game built with modern web technologies.",
+      stack: ['CSS','JavaScript', 'HTML'],
+      image: '/uploads/Projects/tictactoe.png',
+      button: {
+        label: 'Play',
+        url: 'https://devkyleofficial.github.io/Titactoe-Game/',
+      },
+    },
+  ],
+
+  /** Section order and labels for grouped credentials. */
+  certificateGroups: [
+    { id: 'dict', title: 'DICT' },
+    { id: 'cisco', title: 'Cisco' },
+    { id: 'others', title: 'Others' },
   ],
 
   /** Images in public/uploads/Certificates/ — paths must match filenames exactly. */
@@ -129,6 +182,7 @@ export const site = {
     {
       id: 'cert-1',
       order: 1,
+      group: 'others',
       title: 'Entrepreneurship and Start-up Thinking',
       issuer: 'Samvinna',
       issued: '2025',
@@ -138,6 +192,7 @@ export const site = {
     {
       id: 'cert-2',
       order: 2,
+      group: 'dict',
       title: 'Lakbay Likha Digital Creative Roadshow',
       issuer: 'DICT',
       issued: '2025',
@@ -147,6 +202,7 @@ export const site = {
     {
       id: 'cert-3',
       order: 3,
+      group: 'dict',
       title: 'A.I-Deas',
       issuer: 'DICT',
       issued: '2025',
@@ -156,6 +212,7 @@ export const site = {
     {
       id: 'cert-4',
       order: 4,
+      group: 'dict',
       title: 'Info Session on AI-Powered Future',
       issuer: 'DICT Region 5',
       issued: '2025',
@@ -165,6 +222,7 @@ export const site = {
     {
       id: 'cert-5',
       order: 5,
+      group: 'others',
       title: 'Hour of Code',
       issuer: 'AI Ready ASEAN Programme',
       issued: '2025',
@@ -174,6 +232,7 @@ export const site = {
     {
       id: 'cert-6',
       order: 6,
+      group: 'dict',
       title: 'Introduction to Cybersecurity',
       issuer: 'DICT-ITU DTC Initiative · Cisco',
       issued: '2025',
@@ -184,6 +243,7 @@ export const site = {
     {
       id: 'cert-7',
       order: 7,
+      group: 'others',
       title: 'Basic Office Productivity Skills',
       issuer: 'University of the Cordilleras',
       issued: '2025',
@@ -193,6 +253,7 @@ export const site = {
     {
       id: 'cert-8',
       order: 8,
+      group: 'others',
       title: 'Certificate of Completion — Internship',
       issuer: 'UC InTTO',
       issued: '2025',
@@ -202,6 +263,7 @@ export const site = {
     {
       id: 'cert-9',
       order: 9,
+      group: 'cisco',
       title: 'Introduction to Cybersecurity',
       issuer: 'Cisco',
       issued: '2025',
@@ -211,6 +273,7 @@ export const site = {
     {
       id: 'cert-10',
       order: 10,
+      group: 'cisco',
       title: 'Endpoint Security',
       issuer: 'Cisco',
       issued: '2025',
@@ -220,12 +283,58 @@ export const site = {
     {
       id: 'cert-11',
       order: 11,
+      group: 'dict',
       title: 'Endpoint Security',
       issuer: 'DICT-ITU DTC Initiative · Cisco',
       issued: '2025',
       description: 'DICT–ITU DTC endpoint security track with Cisco.',
       image:
         '/uploads/Certificates/Endpoint Security course offered by DICT-ITU DTC Initiative by CISCO.png',
+    },
+    {
+      id: 'cert-12',
+      order: 12,
+      group: 'cisco',
+      title: 'JavaScript Essentials 1',
+      issuer: 'Cisco',
+      issued: '2025',
+      description: 'JavaScript essentials 1 track with Cisco.',
+      image:
+        '/uploads/Certificates/JavaScript Essentials 1.png',
+    },
+    {
+      id: 'cert-13',
+      order: 13,
+      group: 'dict',
+      title: 'IoT & Smart Solutions For PH Communities',
+      issuer: 'DICT CAR · Cisco',
+      issued: '2025',
+      description: 'IoT and smart solutions for Philippine communities.',
+      image:
+        '/uploads/Certificates/Iot & Smart Solutions for Ph Communities by ICT Literacy and Competency Development Bureaus Digital Workforce Program by DICT CAR.png',
+    },
+    {
+      id: 'cert-14',
+      order: 14,
+      group: 'others',
+      title: 'DevFest Baguio 2025 — Participation',
+      issuer: 'Google Developer Group Baguio',
+      issued: '2025',
+      description:
+        'Certificate of participation — DevFest Baguio 2025, Baguio Convention and Cultural Center.',
+      image: '/uploads/Certificates/DevFest baguio 2025 by Google Developers Group Baguio.png',
+    },
+    {
+      id: 'cert-15',
+      order: 15,
+      group: 'others',
+      title: 'DevFest Baguio 2025 — Volunteer Staff',
+      issuer: 'Google Developer Group Baguio',
+      issued: '2025',
+      description:
+        'Certificate of appreciation for volunteer staff service during DevFest Baguio 2025.',
+      image:
+        '/uploads/Certificates/Volunteer Staff During DevFest by Google Developers Group Baguio.png',
     },
   ],
 

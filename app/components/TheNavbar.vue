@@ -3,18 +3,64 @@ import { site } from '~/data/site'
 
 const mobileOpen = ref(false)
 const scrolled = ref(false)
+const navHidden = ref(false)
 
-const onScroll = () => {
-  scrolled.value = window.scrollY > 12
+const lenis = inject('lenis', null)
+
+let lastScrollY = 0
+let lenisScrollHandler = null
+
+const HIDE_AFTER_Y = 72
+const SCROLL_DELTA = 6
+
+function updateNavScroll(currentY) {
+  scrolled.value = currentY > 12
+
+  if (mobileOpen.value || currentY < HIDE_AFTER_Y) {
+    navHidden.value = false
+    lastScrollY = currentY
+    return
+  }
+
+  const delta = currentY - lastScrollY
+  if (Math.abs(delta) < SCROLL_DELTA) return
+
+  navHidden.value = delta > 0
+  lastScrollY = currentY
+}
+
+function onWindowScroll() {
+  updateNavScroll(window.scrollY)
 }
 
 onMounted(() => {
-  onScroll()
-  window.addEventListener('scroll', onScroll, { passive: true })
+  if (typeof window === 'undefined') return
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  onWindowScroll()
+
+  if (reduced) {
+    window.addEventListener('scroll', onWindowScroll, { passive: true })
+    return
+  }
+
+  if (lenis?.on) {
+    lenisScrollHandler = ({ scroll }) => updateNavScroll(scroll)
+    lenis.on('scroll', lenisScrollHandler)
+  }
+
+  window.addEventListener('scroll', onWindowScroll, { passive: true })
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('scroll', onWindowScroll)
+  if (lenis?.off && lenisScrollHandler) {
+    lenis.off('scroll', lenisScrollHandler)
+  }
+})
+
+watch(mobileOpen, (open) => {
+  if (open) navHidden.value = false
 })
 
 function closeDrawer() {
@@ -29,13 +75,16 @@ const navMain = computed(() => site.nav.filter((item) => item.id !== 'contact'))
 
 <template>
   <header
-    class="fixed left-0 right-0 top-0 z-50 transition-[padding] duration-300"
-    :class="scrolled ? 'pt-2' : 'pt-3'"
+    class="nav-shell fixed left-0 right-0 top-0 z-50 px-0 transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform"
+    :class="[
+      scrolled ? 'pt-2' : 'pt-3',
+      navHidden ? 'nav-shell--hidden pointer-events-none' : 'nav-shell--visible',
+    ]"
   >
     <div class="mx-auto max-w-6xl px-3 sm:px-4">
       <div
-        class="nav-bar flex min-h-[52px] items-center justify-between gap-2 rounded-2xl px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5"
-        :class="scrolled ? 'nav-bar--scrolled' : ''"
+        class="nav-bar flex min-h-[52px] items-center justify-between gap-2 rounded-2xl px-3 py-2 transition-[background-color,border-color,box-shadow,opacity] duration-300 sm:gap-3 sm:px-4 sm:py-2.5"
+        :class="scrolled ? 'nav-bar--scrolled' : 'nav-bar--top'"
       >
         <a href="#" class="nav-logo flex items-center gap-0.5 truncate">
           <span class="nav-logo__prompt">&lt;</span>
@@ -101,7 +150,6 @@ const navMain = computed(() => site.nav.filter((item) => item.id !== 'contact'))
           <span class="text-emerald-400/90">→</span>
           {{ item.label }}
         </a>
-
       </nav>
     </TDrawer>
   </header>
