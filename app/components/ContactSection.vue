@@ -104,8 +104,6 @@ function onBgError() {
           </button>
         </div>
 
-        <PortfolioInstallPanel />
-
         <div
           v-if="site.github || site.linkedin"
           class="mt-10 flex flex-wrap items-center justify-center gap-6 border-t border-white/10 pt-8 text-sm font-medium"
@@ -130,6 +128,8 @@ function onBgError() {
             LinkedIn
           </a>
         </div>
+
+        <PortfolioInstallPanel />
       </div>
     </div>
   </section>

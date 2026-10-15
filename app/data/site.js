@@ -77,15 +77,11 @@ export const site = {
     imageCaption: 'Building, debugging, and shipping from the desk',
   },
 
-  /** PWA install + Android APK (built in CI → public/downloads/). */
+  /** PWA + APK (built in CI → public/downloads/). */
   pwa: {
     displayName: 'Kyle | Portfolio',
-    shortName: 'Kyle',
     apkFileName: 'Kyle-Portfolio.apk',
     apkPath: '/downloads/Kyle-Portfolio.apk',
-    installHint:
-      'Install the portfolio as an app — content updates when you go online after each site deploy.',
-    iosHint: 'On iPhone/iPad: Share → Add to Home Screen.',
   },
 
   media: {

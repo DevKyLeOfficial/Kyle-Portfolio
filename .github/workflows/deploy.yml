@@ -52,6 +52,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Build Android APK (Kyle | Portfolio)
+        continue-on-error: true
         run: node scripts/build-apk.mjs
         env:
           CAPACITOR_SERVER_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/

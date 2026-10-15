@@ -1,17 +1,15 @@
 import { site } from '~/data/site'
 
-/** PWA install prompt + APK download URL (respects GitHub Pages baseURL). */
+/** Installer: PWA on desktop; PWA then verified APK on Android only. */
 export function usePortfolioInstall() {
   const { mediaUrl } = usePublicMedia()
   const nuxtApp = useNuxtApp()
+  const notify = useNotify()
 
   const canInstall = ref(false)
   const isInstalled = ref(false)
-  const isIos = ref(false)
-  const isAndroid = ref(false)
 
   const apkUrl = computed(() => mediaUrl(site.pwa?.apkPath ?? ''))
-  const displayName = computed(() => site.pwa?.displayName ?? 'Kyle | Portfolio')
 
   let pollId = null
 
@@ -23,9 +21,6 @@ export function usePortfolioInstall() {
   }
 
   onMounted(() => {
-    const ua = navigator.userAgent || ''
-    isIos.value = /iphone|ipad|ipod/i.test(ua)
-    isAndroid.value = /android/i.test(ua)
     tick()
     pollId = window.setInterval(tick, 800)
     window.addEventListener('appinstalled', tick)
@@ -41,16 +36,56 @@ export function usePortfolioInstall() {
     if (pwa?.install) await pwa.install()
   }
 
+  async function apkLooksValid(url) {
+    try {
+      const res = await fetch(url, { method: 'HEAD' })
+      if (!res.ok) return false
+      const type = (res.headers.get('content-type') || '').toLowerCase()
+      const len = Number(res.headers.get('content-length') || 0)
+      if (type.includes('text/html')) return false
+      return len > 50_000
+    } catch {
+      return false
+    }
+  }
+
+  async function runInstaller() {
+    if (isInstalled.value) return
+
+    if (canInstall.value) {
+      try {
+        await promptInstall()
+      } catch {
+        notify.warning('Install cancelled.')
+      }
+      return
+    }
+
+    const isAndroid = /android/i.test(navigator.userAgent || '')
+
+    if (!isAndroid) {
+      notify.warning(
+        'Use Chrome or Edge on this PC: click the install (⊕) icon in the address bar. This button does not download a Windows app.',
+      )
+      return
+    }
+
+    const url = apkUrl.value
+    if (!url) return
+
+    if (!(await apkLooksValid(url))) {
+      notify.warning(
+        'Package not on the server yet. Use Chrome menu → Install app, or try again after the site deploy finishes.',
+      )
+      return
+    }
+
+    window.location.assign(url)
+  }
+
   return {
-    apkUrl,
-    displayName,
     canInstall,
     isInstalled,
-    isIos,
-    isAndroid,
-    promptInstall,
-    installHint: site.pwa?.installHint,
-    iosHint: site.pwa?.iosHint,
-    apkFileName: site.pwa?.apkFileName ?? 'Kyle-Portfolio.apk',
+    runInstaller,
   }
 }
