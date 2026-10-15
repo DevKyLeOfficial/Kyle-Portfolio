@@ -34,10 +34,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate PWA icons
+        run: node scripts/generate-pwa-icons.mjs
+
       - name: Generate static site
         run: npm run generate
         env:
           NUXT_APP_BASE_URL: /${{ github.event.repository.name }}/
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build Android APK (Kyle | Portfolio)
+        run: node scripts/build-apk.mjs
+        env:
+          CAPACITOR_SERVER_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
 
       - name: Preserve Nuxt asset directory on Pages
         run: touch .output/public/.nojekyll
